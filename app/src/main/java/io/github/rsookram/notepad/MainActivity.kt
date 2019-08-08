@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
+import io.github.rsookram.notepad.view.CollapseInterceptor
 import io.github.rsookram.notepad.view.NoteAdapter
 import io.github.rsookram.notepad.view.SwipeDismissCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_note.*
-import me.saket.inboxrecyclerview.page.InterceptResult
 import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
 class MainActivity : AppCompatActivity() {
@@ -48,11 +48,7 @@ class MainActivity : AppCompatActivity() {
             vm.onSwipedAway(position)
         }).attachToRecyclerView(note_list)
 
-        expandable_page.pullToCollapseInterceptor = { _, _, upwardPull ->
-            val directionInt = if (upwardPull) +1 else -1
-            val canScrollFurther = note_content.canScrollVertically(directionInt)
-            if (canScrollFurther) InterceptResult.INTERCEPTED else InterceptResult.IGNORED
-        }
+        expandable_page.pullToCollapseInterceptor = CollapseInterceptor(note_content)
 
         expandable_page.addStateChangeCallbacks(object : SimplePageStateChangeCallbacks() {
             override fun onPageAboutToCollapse(collapseAnimDuration: Long) {
