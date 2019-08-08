@@ -31,7 +31,7 @@ class NoteAdapter(
             }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.view.text = getItem(position).title
+        holder.view.text = determineTitle(getItem(position).content)
     }
 
     override fun getItemId(position: Int): Long = getItem(position).id
@@ -45,5 +45,14 @@ private class Diff : DiffUtil.ItemCallback<Note>() {
         oldItem.key == newItem.key
 
     override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean =
-        oldItem.title == newItem.title
+        determineTitle(oldItem.content) == determineTitle(newItem.content)
+}
+
+private fun determineTitle(content: String): String {
+    var end = content.asSequence().indexOfFirst { it == '\n' }
+    if (end < 1) {
+        end = content.length
+    }
+
+    return content.substring(0, end)
 }

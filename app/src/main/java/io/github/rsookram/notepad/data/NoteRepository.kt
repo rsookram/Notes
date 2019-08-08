@@ -20,7 +20,7 @@ class NoteRepository(private val prefs: SharedPreferences) {
         prefs.all
             .mapNotNull { (key, content) ->
                 if (content is String) {
-                    Note(key, determineTitle(content), content)
+                    Note(key, content)
                 } else {
                     null
                 }
@@ -31,7 +31,7 @@ class NoteRepository(private val prefs: SharedPreferences) {
         val previousKey = prefs.all.keys.maxBy { it.toInt() }?.toInt() ?: 0
         val key = (previousKey + 1).toString()
 
-        val note = Note(key, determineTitle(content), content)
+        val note = Note(key, content)
         save(key, content)
 
         return note
@@ -39,7 +39,7 @@ class NoteRepository(private val prefs: SharedPreferences) {
 
     fun get(key: String): Note? {
         val content = prefs.getString(key, null) ?: return null
-        return Note(key, determineTitle(content), content)
+        return Note(key, content)
     }
 
     fun save(key: String, content: String) {
@@ -50,14 +50,5 @@ class NoteRepository(private val prefs: SharedPreferences) {
 
     fun delete(note: Note) {
         prefs.edit().remove(note.key).apply()
-    }
-
-    private fun determineTitle(content: String): String {
-        var end = content.asSequence().indexOfFirst { it == '\n' }
-        if (end < 1) {
-            end = content.length
-        }
-
-        return content.substring(0, end)
     }
 }
