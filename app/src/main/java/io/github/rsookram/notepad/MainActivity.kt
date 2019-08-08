@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_note.*
 import me.saket.inboxrecyclerview.page.InterceptResult
@@ -11,9 +12,13 @@ import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var vm: NoteViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel()
 
         note_list.setExpandablePage(expandable_page)
 
@@ -21,12 +26,13 @@ class MainActivity : AppCompatActivity() {
             note_content.bind(note)
             note_list.expandItem(note.id)
         }
-        adapter.submitList(listOf(
-            Note("", "first", ""),
-            Note("", "second", ""),
-            Note("", "third", ""),
-            Note("", "fourth", "")
-        ))
+
+        vm.notes.observe(this, Observer { notes ->
+            if (notes != null) {
+                adapter.submitList(notes)
+            }
+        })
+
         note_list.adapter = adapter
 
         expandable_page.pullToCollapseInterceptor = { _, _, upwardPull ->
@@ -42,6 +48,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    override fun onRetainCustomNonConfigurationInstance(): Any = vm
 
     override fun onBackPressed() {
         if (expandable_page.isExpandedOrExpanding) {
