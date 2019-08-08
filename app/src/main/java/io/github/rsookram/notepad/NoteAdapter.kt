@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class NoteAdapter : ListAdapter<Note, NoteAdapter.Holder>(Diff()) {
+class NoteAdapter(
+    private val onClick: (Note) -> Unit
+) : ListAdapter<Note, NoteAdapter.Holder>(Diff()) {
 
     init {
         setHasStableIds(true)
@@ -17,13 +19,20 @@ class NoteAdapter : ListAdapter<Note, NoteAdapter.Holder>(Diff()) {
         LayoutInflater.from(parent.context)
             .inflate(R.layout.item_note, parent, false)
             .let { Holder(it as TextView) }
+            .also { holder ->
+                holder.itemView.setOnClickListener {
+                    val position = holder.adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        onClick(getItem(position))
+                    }
+                }
+            }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.view.text = getItem(position).title
     }
 
-    override fun getItemId(position: Int): Long =
-        getItem(position).key.hashCode().toLong()
+    override fun getItemId(position: Int): Long = getItem(position).id
 
     class Holder(val view: TextView) : RecyclerView.ViewHolder(view)
 }

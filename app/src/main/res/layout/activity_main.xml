@@ -13,18 +13,15 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-    <!--
-      This is where your expandable content will be present. One
-      way of using it would be to add a Fragment inside the layout
-      and update it when any list item is clicked.
-
-      It's recommended that the content page has a higher z-index
-      than the list. This can be achieved by either giving it a
-      higher view position or a higher elevation.
-    -->
     <me.saket.inboxrecyclerview.page.ExpandablePageLayout
         android:id="@+id/expandable_page"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <io.github.rsookram.notepad.NoteView
+            android:id="@+id/note_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </me.saket.inboxrecyclerview.page.ExpandablePageLayout>
 
 </FrameLayout>
