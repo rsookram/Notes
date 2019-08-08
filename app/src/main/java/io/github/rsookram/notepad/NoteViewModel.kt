@@ -2,6 +2,8 @@ package io.github.rsookram.notepad
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.github.rsookram.notepad.data.Note
+import io.github.rsookram.notepad.data.NoteRepository
 
 class NoteViewModel(private val repository: NoteRepository) {
 

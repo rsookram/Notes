@@ -1,4 +1,4 @@
-package io.github.rsookram.notepad
+package io.github.rsookram.notepad.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.github.rsookram.notepad.R
+import io.github.rsookram.notepad.data.Note
 
 class NoteAdapter(
     private val onClick: (Note) -> Unit

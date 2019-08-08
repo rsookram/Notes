@@ -1,4 +1,4 @@
-package io.github.rsookram.notepad
+package io.github.rsookram.notepad.view
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper

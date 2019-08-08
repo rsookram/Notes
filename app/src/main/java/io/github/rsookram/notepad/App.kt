@@ -3,6 +3,7 @@ package io.github.rsookram.notepad
 import android.app.Application
 import android.content.Context
 import android.preference.PreferenceManager
+import io.github.rsookram.notepad.data.NoteRepository
 
 class App : Application() {
 

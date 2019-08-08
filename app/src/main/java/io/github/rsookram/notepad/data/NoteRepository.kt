@@ -1,4 +1,4 @@
-package io.github.rsookram.notepad
+package io.github.rsookram.notepad.data
 
 import android.content.SharedPreferences
 

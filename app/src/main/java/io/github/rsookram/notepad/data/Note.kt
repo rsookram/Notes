@@ -1,4 +1,4 @@
-package io.github.rsookram.notepad
+package io.github.rsookram.notepad.data
 
 data class Note(val key: String, val title: String, val content: String) {
 

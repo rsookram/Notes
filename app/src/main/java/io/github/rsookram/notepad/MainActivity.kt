@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
+import io.github.rsookram.notepad.view.NoteAdapter
+import io.github.rsookram.notepad.view.SwipeDismissCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_note.*
 import me.saket.inboxrecyclerview.page.InterceptResult
