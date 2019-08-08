@@ -18,14 +18,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel()
+        vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel(app.repository)
+
+        vm.openNote.observe(this, Observer { event ->
+            val note = event?.getContentIfNotHandled()
+            if (note != null) {
+                note_content.bind(note)
+                note_list.expandItem(note.id)
+            }
+        })
 
         note_list.setExpandablePage(expandable_page)
 
-        val adapter = NoteAdapter { note ->
-            note_content.bind(note)
-            note_list.expandItem(note.id)
-        }
+        val adapter = NoteAdapter(vm::onNoteClicked)
 
         vm.notes.observe(this, Observer { notes ->
             if (notes != null) {
@@ -43,10 +48,25 @@ class MainActivity : AppCompatActivity() {
 
         expandable_page.addStateChangeCallbacks(object : SimplePageStateChangeCallbacks() {
             override fun onPageAboutToCollapse(collapseAnimDuration: Long) {
+                vm.onNoteClosed(note_edit_text.text.toString())
+
                 val imm = getSystemService<InputMethodManager>()!!
                 imm.hideSoftInputFromWindow(note_edit_text.windowToken, 0)
             }
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        vm.onStop(note_edit_text.text.toString())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if (!isChangingConfigurations) {
+            vm.onCleared()
+        }
     }
 
     override fun onRetainCustomNonConfigurationInstance(): Any = vm
