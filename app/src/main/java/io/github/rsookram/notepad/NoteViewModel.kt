@@ -26,6 +26,11 @@ class NoteViewModel(private val repository: NoteRepository) {
         }
     }
 
+    fun onSwipedAway(position: Int) {
+        val note = _notes.value?.getOrNull(position) ?: return
+        repository.delete(note)
+    }
+
     fun onStop(content: String) {
         val current = currentNote ?: return
         repository.save(current.key, content)

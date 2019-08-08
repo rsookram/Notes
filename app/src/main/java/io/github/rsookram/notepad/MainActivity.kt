@@ -5,6 +5,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_note.*
 import me.saket.inboxrecyclerview.page.InterceptResult
@@ -39,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         note_list.adapter = adapter
+
+        ItemTouchHelper(SwipeDismissCallback { holder ->
+            val position = note_list.getChildAdapterPosition(holder.itemView)
+            vm.onSwipedAway(position)
+        }).attachToRecyclerView(note_list)
 
         expandable_page.pullToCollapseInterceptor = { _, _, upwardPull ->
             val directionInt = if (upwardPull) +1 else -1
