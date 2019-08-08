@@ -17,6 +17,8 @@ class NoteView(context: Context, attrs: AttributeSet) : NestedScrollView(context
         clipToPadding = false
 
         View.inflate(context, R.layout.view_note, this)
+
+        note_edit_text.addTextChangedListener(ApplyTitleSpanTextWatcher())
     }
 
     fun bind(note: Note) {
