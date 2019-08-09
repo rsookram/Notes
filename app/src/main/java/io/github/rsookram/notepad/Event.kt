@@ -6,7 +6,7 @@ package io.github.rsookram.notepad
  *
  * Based off https://gist.github.com/JoseAlcerreca/5b661f1800e1e654f07cc54fe87441af
  */
-open class Event<out T : Any>(private val content: T) {
+class Event<out T : Any>(private val content: T) {
 
     private var handled = false
 
