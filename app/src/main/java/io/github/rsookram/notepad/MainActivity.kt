@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         note_list.setExpandablePage(expandable_page)
 
-        val controller = NoteController(vm::onNoteClicked)
+        val controller = NoteController(vm::onNoteClicked, vm::onCreateNoteClicked)
 
         vm.notes.observe(this, Observer { notes ->
             if (notes != null) {

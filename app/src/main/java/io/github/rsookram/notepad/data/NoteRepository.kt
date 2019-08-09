@@ -10,10 +10,12 @@ class NoteRepository(private val prefs: SharedPreferences) {
             field = value
         }
 
+    private val changeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        onUpdate?.invoke(getNotes())
+    }
+
     init {
-        prefs.registerOnSharedPreferenceChangeListener { _, _ ->
-            onUpdate?.invoke(getNotes())
-        }
+        prefs.registerOnSharedPreferenceChangeListener(changeListener)
     }
 
     private fun getNotes(): List<Note> =
@@ -27,14 +29,11 @@ class NoteRepository(private val prefs: SharedPreferences) {
             }
             .sortedBy { it.key.toInt() }
 
-    fun create(content: String): Note {
+    fun next(): Note {
         val previousKey = prefs.all.keys.maxBy { it.toInt() }?.toInt() ?: 0
         val key = (previousKey + 1).toString()
 
-        val note = Note(key, content)
-        save(key, content)
-
-        return note
+        return Note(key, "")
     }
 
     fun get(key: String): Note? {

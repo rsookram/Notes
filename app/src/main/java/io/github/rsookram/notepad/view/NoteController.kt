@@ -3,7 +3,10 @@ package io.github.rsookram.notepad.view
 import com.airbnb.epoxy.EpoxyController
 import io.github.rsookram.notepad.data.Note
 
-class NoteController(private val onClick: (Note) -> Unit) : EpoxyController() {
+class NoteController(
+    private val onClick: (Note) -> Unit,
+    private val onCreateClick: () -> Unit
+) : EpoxyController() {
 
     var notes: List<Note> = emptyList()
         set(value) {
@@ -20,6 +23,11 @@ class NoteController(private val onClick: (Note) -> Unit) : EpoxyController() {
                 title(determineTitle(note.content))
                 onClick { onClick(note) }
             }
+        }
+
+        createNoteView {
+            id(Long.MAX_VALUE)
+            onClick { onCreateClick() }
         }
     }
 

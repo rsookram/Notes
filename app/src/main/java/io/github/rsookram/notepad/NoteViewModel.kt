@@ -28,6 +28,12 @@ class NoteViewModel(private val repository: NoteRepository) {
         }
     }
 
+    fun onCreateNoteClicked() {
+        val n = repository.next()
+        currentNote = n
+        _openNote.value = Event(n)
+    }
+
     fun onSwipedAway(position: Int) {
         val note = _notes.value?.getOrNull(position) ?: return
         repository.delete(note)
@@ -46,7 +52,7 @@ class NoteViewModel(private val repository: NoteRepository) {
     }
 
     private fun saveIfNotEmpty(note: Note, content: String) {
-        if (note.content.isNotBlank()) {
+        if (content.isNotBlank()) {
             repository.save(note.key, content)
         }
     }
