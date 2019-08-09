@@ -12,6 +12,8 @@ class NoteController(private val onClick: (Note) -> Unit) : EpoxyController() {
         }
 
     override fun buildModels() {
+        headerView { id(0) }
+
         notes.forEach { note ->
             noteItemView {
                 id(note.key)
