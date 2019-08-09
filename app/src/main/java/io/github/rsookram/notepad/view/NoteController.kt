@@ -16,7 +16,7 @@ class NoteController(private val onClick: (Note) -> Unit) : EpoxyController() {
 
         notes.forEach { note ->
             noteItemView {
-                id(note.key)
+                id(note.id)
                 title(determineTitle(note.content))
                 onClick { onClick(note) }
             }
