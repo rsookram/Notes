@@ -13,12 +13,35 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+
+        resConfigs("en")
     }
+
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        debug {
+            signingConfig = signingConfigs.debug
         }
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles 'proguard-rules.pro'
+
+            // Just for testing release builds. Not actually distributed.
+            signingConfig = signingConfigs.debug
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
+    packagingOptions {
+        exclude("/kotlin/**")
     }
 }
 
