@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity() {
         note_list.adapter = controller.adapter
 
         ItemTouchHelper(SwipeDismissCallback { holder ->
-            val position = note_list.getChildAdapterPosition(holder.itemView)
+            // Subtract one to account for the header
+            val position = note_list.getChildAdapterPosition(holder.itemView) - 1
             vm.onSwipedAway(position)
         }).attachToRecyclerView(note_list)
 
