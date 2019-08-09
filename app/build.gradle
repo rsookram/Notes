@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
 
@@ -28,5 +29,13 @@ dependencies {
 
     implementation 'me.saket:inboxrecyclerview:1.0.0'
 
+    implementation 'com.airbnb.android:epoxy:3.7.0'
+    kapt 'com.airbnb.android:epoxy-processor:3.7.0'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+kapt {
+    // Needed for epoxy's annotation processor
+    correctErrorTypes = true
 }

@@ -7,7 +7,7 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import io.github.rsookram.notepad.view.CollapseInterceptor
-import io.github.rsookram.notepad.view.NoteAdapter
+import io.github.rsookram.notepad.view.NoteController
 import io.github.rsookram.notepad.view.SwipeDismissCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_note.*
@@ -27,21 +27,22 @@ class MainActivity : AppCompatActivity() {
             val note = event?.getContentIfNotHandled()
             if (note != null) {
                 note_content.bind(note)
+                note_content.scrollTo(0, 0)
                 note_list.expandItem(note.id)
             }
         })
 
         note_list.setExpandablePage(expandable_page)
 
-        val adapter = NoteAdapter(vm::onNoteClicked)
+        val controller = NoteController(vm::onNoteClicked)
 
         vm.notes.observe(this, Observer { notes ->
             if (notes != null) {
-                adapter.submitList(notes)
+                controller.notes = notes
             }
         })
 
-        note_list.adapter = adapter
+        note_list.adapter = controller.adapter
 
         ItemTouchHelper(SwipeDismissCallback { holder ->
             val position = note_list.getChildAdapterPosition(holder.itemView)
