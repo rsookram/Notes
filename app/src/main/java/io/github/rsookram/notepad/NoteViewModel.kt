@@ -35,14 +35,20 @@ class NoteViewModel(private val repository: NoteRepository) {
 
     fun onStop(content: String) {
         val current = currentNote ?: return
-        repository.save(current.key, content)
+        saveIfNotEmpty(current, content)
     }
 
     fun onNoteClosed(content: String) {
         val current = currentNote ?: return
 
-        repository.save(current.key, content)
+        saveIfNotEmpty(current, content)
         currentNote = null
+    }
+
+    private fun saveIfNotEmpty(note: Note, content: String) {
+        if (note.content.isNotBlank()) {
+            repository.save(note.key, content)
+        }
     }
 
     fun onCleared() {
