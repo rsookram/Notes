@@ -4,17 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.github.rsookram.notepad.data.Note
 import io.github.rsookram.notepad.data.NoteRepository
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 
 class NoteViewModel(private val repository: NoteRepository) {
 
     private val _notes = MutableLiveData<List<Note>>()
     val notes: LiveData<List<Note>> = _notes
 
-    private val _openNote = MutableLiveData<Event<Note>>()
-    val openNote: LiveData<Event<Note>> = _openNote
+    private val _openNote = Channel<Note>(Channel.CONFLATED)
+    val openNote: ReceiveChannel<Note> = _openNote
 
-    private val _deletedNote = MutableLiveData<Event<Unit>>()
-    val deletedNote: LiveData<Event<Unit>> = _deletedNote
+    private val _deletedNote = Channel<Unit>(Channel.CONFLATED)
+    val deletedNote: ReceiveChannel<Unit> = _deletedNote
 
     private var currentNote: Note? = null
     private var reversibleDelete: Note? = null
@@ -26,16 +28,14 @@ class NoteViewModel(private val repository: NoteRepository) {
     fun onNoteClicked(note: Note) {
         currentNote = note
 
-        val n = repository.get(note.key)
-        if (n != null) {
-            _openNote.value = Event(n)
-        }
+        val n = repository.get(note.key) ?: return
+        _openNote.offer(n)
     }
 
     fun onCreateNoteClicked() {
         val n = repository.next()
         currentNote = n
-        _openNote.value = Event(n)
+        _openNote.offer(n)
 
         // Clear and reversible deletions, since the newly created note may
         // have reused its key
@@ -47,12 +47,12 @@ class NoteViewModel(private val repository: NoteRepository) {
         repository.delete(note)
 
         reversibleDelete = note
-        _deletedNote.value = Event(Unit)
+        _deletedNote.offer(Unit)
     }
 
     fun onUndoDeleteClicked() {
-        val toUndo = reversibleDelete ?: return
-        repository.save(toUndo.key, toUndo.content)
+        val (key, content) = reversibleDelete ?: return
+        repository.save(key, content)
     }
 
     fun onStop(content: String) {

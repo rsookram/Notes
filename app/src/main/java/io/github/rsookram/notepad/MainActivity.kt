@@ -9,11 +9,18 @@ import io.github.rsookram.notepad.view.CollapseInterceptor
 import io.github.rsookram.notepad.view.NoteController
 import io.github.rsookram.notepad.view.SwipeDismissCallback
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.launch
 import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var vm: NoteViewModel
+
+    private val scope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,22 +28,21 @@ class MainActivity : AppCompatActivity() {
 
         vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel(app.repository)
 
-        vm.openNote.observe(this, Observer { event ->
-            val note = event?.getContentIfNotHandled()
-            if (note != null) {
+        scope.launch {
+            vm.openNote.consumeAsFlow().collect { note ->
                 note_content.bind(note)
                 note_content.scrollTo(0, 0)
                 note_list.expandItem(note.id)
             }
-        })
+        }
 
-        vm.deletedNote.observe(this, Observer { event ->
-            if (event.getContentIfNotHandled() != null) {
+        scope.launch {
+            vm.deletedNote.consumeAsFlow().collect {
                 Snackbar.make(note_list, R.string.deleted_note, Snackbar.LENGTH_LONG)
                     .setAction(R.string.undo_deletion) { vm.onUndoDeleteClicked() }
                     .show()
             }
-        })
+        }
 
         note_list.setExpandablePage(expandable_page)
 
@@ -81,6 +87,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        scope.cancel()
 
         if (!isChangingConfigurations) {
             vm.onCleared()
