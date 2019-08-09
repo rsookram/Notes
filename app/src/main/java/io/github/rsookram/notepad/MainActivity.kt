@@ -62,6 +62,17 @@ class MainActivity : AppCompatActivity() {
         expandable_page.pullToCollapseInterceptor = CollapseInterceptor(note_content)
 
         expandable_page.addStateChangeCallbacks(object : SimplePageStateChangeCallbacks() {
+            override fun onPageExpanded() {
+                if (note_edit_text.text.isEmpty()) {
+                    note_edit_text.requestFocus()
+
+                    // If there's nothing to view, open the keyboard to start
+                    // writing
+                    val imm = getSystemService<InputMethodManager>()!!
+                    imm.showSoftInput(note_edit_text, 0)
+                }
+            }
+
             override fun onPageAboutToCollapse(collapseAnimDuration: Long) {
                 vm.onNoteClosed(note_edit_text.text.toString())
 
