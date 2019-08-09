@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import io.github.rsookram.notepad.view.CollapseInterceptor
 import io.github.rsookram.notepad.view.NoteController
 import io.github.rsookram.notepad.view.SwipeDismissCallback
@@ -29,6 +30,14 @@ class MainActivity : AppCompatActivity() {
                 note_content.bind(note)
                 note_content.scrollTo(0, 0)
                 note_list.expandItem(note.id)
+            }
+        })
+
+        vm.deletedNote.observe(this, Observer { event ->
+            if (event.getContentIfNotHandled() != null) {
+                Snackbar.make(note_list, R.string.deleted_note, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.undo_deletion) { vm.onUndoDeleteClicked() }
+                    .show()
             }
         })
 

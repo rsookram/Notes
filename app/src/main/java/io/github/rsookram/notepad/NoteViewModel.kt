@@ -13,7 +13,11 @@ class NoteViewModel(private val repository: NoteRepository) {
     private val _openNote = MutableLiveData<Event<Note>>()
     val openNote: LiveData<Event<Note>> = _openNote
 
+    private val _deletedNote = MutableLiveData<Event<Unit>>()
+    val deletedNote: LiveData<Event<Unit>> = _deletedNote
+
     private var currentNote: Note? = null
+    private var reversibleDelete: Note? = null
 
     init {
         repository.onUpdate = _notes::setValue
@@ -32,11 +36,23 @@ class NoteViewModel(private val repository: NoteRepository) {
         val n = repository.next()
         currentNote = n
         _openNote.value = Event(n)
+
+        // Clear and reversible deletions, since the newly created note may
+        // have reused its key
+        reversibleDelete = null
     }
 
     fun onSwipedAway(position: Int) {
         val note = _notes.value?.getOrNull(position) ?: return
         repository.delete(note)
+
+        reversibleDelete = note
+        _deletedNote.value = Event(Unit)
+    }
+
+    fun onUndoDeleteClicked() {
+        val toUndo = reversibleDelete ?: return
+        repository.save(toUndo.key, toUndo.content)
     }
 
     fun onStop(content: String) {
