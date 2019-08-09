@@ -1,9 +1,7 @@
 package io.github.rsookram.notepad
 
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
@@ -11,7 +9,6 @@ import io.github.rsookram.notepad.view.CollapseInterceptor
 import io.github.rsookram.notepad.view.NoteController
 import io.github.rsookram.notepad.view.SwipeDismissCallback
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.view_note.*
 import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
 class MainActivity : AppCompatActivity() {
@@ -63,28 +60,23 @@ class MainActivity : AppCompatActivity() {
 
         expandable_page.addStateChangeCallbacks(object : SimplePageStateChangeCallbacks() {
             override fun onPageExpanded() {
-                if (note_edit_text.text.isEmpty()) {
-                    note_edit_text.requestFocus()
-
-                    // If there's nothing to view, open the keyboard to start
-                    // writing
-                    val imm = getSystemService<InputMethodManager>()!!
-                    imm.showSoftInput(note_edit_text, 0)
+                // If there's nothing to view, open the keyboard to start
+                // writing
+                if (note_content.content.isEmpty()) {
+                    note_content.showKeyboard()
                 }
             }
 
             override fun onPageAboutToCollapse(collapseAnimDuration: Long) {
-                vm.onNoteClosed(note_edit_text.text.toString())
-
-                val imm = getSystemService<InputMethodManager>()!!
-                imm.hideSoftInputFromWindow(note_edit_text.windowToken, 0)
+                vm.onNoteClosed(note_content.content)
+                note_content.hideKeyboard()
             }
         })
     }
 
     override fun onStop() {
         super.onStop()
-        vm.onStop(note_edit_text.text.toString())
+        vm.onStop(note_content.content)
     }
 
     override fun onDestroy() {
