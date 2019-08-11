@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel(app.repository)
+        vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel(app.dao)
 
         scope.launch {
             vm.openNote.consumeAsFlow().collect { note ->

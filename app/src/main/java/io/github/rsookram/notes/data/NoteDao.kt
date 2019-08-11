@@ -21,6 +21,10 @@ abstract class NoteDao {
     @Query("SELECT id, content FROM note WHERE id = :id")
     abstract suspend fun get(id: Long): Note?
 
+    suspend fun save(id: Long, content: String) {
+        insert(Note(id, content))
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(note: Note)
 

@@ -1,16 +1,16 @@
 package io.github.rsookram.notes
 
 import io.github.rsookram.notes.data.Note
-import io.github.rsookram.notes.data.NoteRepository
+import io.github.rsookram.notes.data.NoteDao
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
-class NoteViewModel(private val repository: NoteRepository) {
+class NoteViewModel(private val dao: NoteDao) {
 
-    val notes = repository.notes
+    val notes = dao.notes()
 
     private val _openNote = Channel<Note>(Channel.CONFLATED)
     val openNote: ReceiveChannel<Note> = _openNote
@@ -24,32 +24,33 @@ class NoteViewModel(private val repository: NoteRepository) {
     private val scope = MainScope()
 
     fun onNoteClicked(note: Note) {
-        currentNote = note
-
         scope.launch {
-            val n = repository.get(note.id) ?: return@launch
+            currentNote = note
+
+            val n = dao.get(note.id) ?: return@launch
             _openNote.offer(n)
         }
     }
 
     fun onCreateNoteClicked() {
         scope.launch {
-            val n = repository.next()
-            currentNote = n
-            _openNote.offer(n)
-
             // Clear and reversible deletions, since the newly created note may
             // have reused its key
             reversibleDelete = null
+
+            val n = dao.next()
+            currentNote = n
+            _openNote.offer(n)
         }
     }
 
     fun onSwipedAway(position: Int) {
         scope.launch {
             val note = notes.value?.getOrNull(position) ?: return@launch
-            repository.delete(note)
-
             reversibleDelete = note
+
+            dao.delete(note)
+
             _deletedNote.offer(Unit)
         }
     }
@@ -57,7 +58,7 @@ class NoteViewModel(private val repository: NoteRepository) {
     fun onUndoDeleteClicked() {
         scope.launch {
             val (id, content) = reversibleDelete ?: return@launch
-            repository.save(id, content)
+            dao.save(id, content)
         }
     }
 
@@ -76,7 +77,7 @@ class NoteViewModel(private val repository: NoteRepository) {
     private fun saveIfNotEmpty(note: Note, content: String) {
         scope.launch {
             if (content.isNotBlank()) {
-                repository.save(note.id, content)
+                dao.save(note.id, content)
             }
         }
     }
