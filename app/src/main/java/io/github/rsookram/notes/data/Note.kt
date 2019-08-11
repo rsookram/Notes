@@ -1,6 +1,11 @@
 package io.github.rsookram.notes.data
 
-data class Note(val key: String, val content: String) {
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-    val id = key.hashCode().toLong()
-}
+@Entity(tableName = "note")
+data class Note(
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "content") val content: String
+)

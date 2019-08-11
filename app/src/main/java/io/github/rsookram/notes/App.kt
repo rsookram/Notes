@@ -2,14 +2,20 @@ package io.github.rsookram.notes
 
 import android.app.Application
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.room.Room
+import io.github.rsookram.notes.data.AppDatabase
 import io.github.rsookram.notes.data.NoteRepository
 
 class App : Application() {
 
-    val repository by lazy {
-        NoteRepository(PreferenceManager.getDefaultSharedPreferences(this))
+    val repository by lazy { NoteRepository(dao) }
+
+    private val database by lazy {
+        Room.databaseBuilder(this, AppDatabase::class.java, "note.db")
+            .build()
     }
+
+    private val dao by lazy { database.noteDao() }
 }
 
 val Context.app: App

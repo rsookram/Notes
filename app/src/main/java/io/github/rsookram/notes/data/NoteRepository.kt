@@ -1,53 +1,18 @@
 package io.github.rsookram.notes.data
 
-import android.content.SharedPreferences
+class NoteRepository(private val dao: NoteDao) {
 
-class NoteRepository(private val prefs: SharedPreferences) {
+    val notes = dao.notes()
 
-    var onUpdate: ((List<Note>) -> Unit)? = null
-        set(value) {
-            value?.invoke(getNotes())
-            field = value
-        }
+    suspend fun next(): Note = dao.next()
 
-    private val changeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-        onUpdate?.invoke(getNotes())
+    suspend fun get(id: Long): Note? = dao.get(id)
+
+    suspend fun save(id: Long, content: String) {
+        dao.insert(Note(id, content))
     }
 
-    init {
-        prefs.registerOnSharedPreferenceChangeListener(changeListener)
-    }
-
-    private fun getNotes(): List<Note> =
-        prefs.all
-            .mapNotNull { (key, content) ->
-                if (content is String) {
-                    Note(key, content)
-                } else {
-                    null
-                }
-            }
-            .sortedBy { it.key.toInt() }
-
-    fun next(): Note {
-        val previousKey = prefs.all.keys.maxBy { it.toInt() }?.toInt() ?: 0
-        val key = (previousKey + 1).toString()
-
-        return Note(key, "")
-    }
-
-    fun get(key: String): Note? {
-        val content = prefs.getString(key, null) ?: return null
-        return Note(key, content)
-    }
-
-    fun save(key: String, content: String) {
-        prefs.edit()
-            .putString(key, content)
-            .apply()
-    }
-
-    fun delete(note: Note) {
-        prefs.edit().remove(note.key).apply()
+    suspend fun delete(note: Note) {
+        dao.delete(note)
     }
 }
