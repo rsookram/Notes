@@ -1,9 +1,9 @@
-package io.github.rsookram.notepad
+package io.github.rsookram.notes
 
 import android.app.Application
 import android.content.Context
 import android.preference.PreferenceManager
-import io.github.rsookram.notepad.data.NoteRepository
+import io.github.rsookram.notes.data.NoteRepository
 
 class App : Application() {
 

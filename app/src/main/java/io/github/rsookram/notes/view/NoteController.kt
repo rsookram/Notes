@@ -1,7 +1,7 @@
-package io.github.rsookram.notepad.view
+package io.github.rsookram.notes.view
 
 import com.airbnb.epoxy.EpoxyController
-import io.github.rsookram.notepad.data.Note
+import io.github.rsookram.notes.data.Note
 
 class NoteController(
     private val onClick: (Note) -> Unit,

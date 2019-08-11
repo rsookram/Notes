@@ -8,7 +8,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId "io.github.rsookram.notepad"
+        applicationId "io.github.rsookram.notes"
         minSdkVersion 25
         targetSdkVersion 28
         versionCode 1

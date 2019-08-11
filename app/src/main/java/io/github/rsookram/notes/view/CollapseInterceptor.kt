@@ -1,4 +1,4 @@
-package io.github.rsookram.notepad.view
+package io.github.rsookram.notes.view
 
 import android.view.View
 import me.saket.inboxrecyclerview.page.InterceptResult

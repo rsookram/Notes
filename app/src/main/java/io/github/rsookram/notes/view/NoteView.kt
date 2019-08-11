@@ -1,4 +1,4 @@
-package io.github.rsookram.notepad.view
+package io.github.rsookram.notes.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,8 +7,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
 import androidx.core.widget.NestedScrollView
-import io.github.rsookram.notepad.R
-import io.github.rsookram.notepad.data.Note
+import io.github.rsookram.notes.R
+import io.github.rsookram.notes.data.Note
 import kotlinx.android.synthetic.main.view_note.view.*
 
 class NoteView(context: Context, attrs: AttributeSet) : NestedScrollView(context, attrs) {

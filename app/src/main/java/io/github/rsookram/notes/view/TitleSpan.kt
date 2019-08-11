@@ -1,4 +1,4 @@
-package io.github.rsookram.notepad.view
+package io.github.rsookram.notes.view
 
 import android.text.Editable
 import android.text.Spanned

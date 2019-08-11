@@ -1,9 +1,9 @@
-package io.github.rsookram.notepad
+package io.github.rsookram.notes
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.github.rsookram.notepad.data.Note
-import io.github.rsookram.notepad.data.NoteRepository
+import io.github.rsookram.notes.data.Note
+import io.github.rsookram.notes.data.NoteRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 
