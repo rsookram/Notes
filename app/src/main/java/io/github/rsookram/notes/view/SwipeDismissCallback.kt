@@ -6,8 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.abs
 
 class SwipeDismissCallback(
+    private val canSwipe: (Long) -> Boolean,
     private val onSwiped: (RecyclerView.ViewHolder) -> Unit
-) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START or ItemTouchHelper.END) {
+) : ItemTouchHelper.Callback() {
+
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
+        val canSwipeFlags = makeMovementFlags(0, ItemTouchHelper.START or ItemTouchHelper.END)
+        return if (canSwipe(viewHolder.itemId)) canSwipeFlags else 0
+    }
 
     override fun onMove(
         recyclerView: RecyclerView,

@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         note_list.adapter = controller.adapter
 
-        ItemTouchHelper(SwipeDismissCallback { holder ->
+        ItemTouchHelper(SwipeDismissCallback(canSwipe = { !controller.isFixed(it) }) { holder ->
             // Subtract one to account for the header
             val position = note_list.getChildAdapterPosition(holder.itemView) - 1
             vm.onSwipedAway(position)

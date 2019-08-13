@@ -3,6 +3,9 @@ package io.github.rsookram.notes.view
 import com.airbnb.epoxy.EpoxyController
 import io.github.rsookram.notes.data.Note
 
+private const val ID_HEADER = 0L
+private const val ID_CREATE_NOTE = Long.MAX_VALUE
+
 class NoteController(
     private val onClick: (Note) -> Unit,
     private val onCreateClick: () -> Unit
@@ -14,8 +17,11 @@ class NoteController(
             requestModelBuild()
         }
 
+    fun isFixed(itemId: Long): Boolean =
+        itemId == ID_HEADER || itemId == ID_CREATE_NOTE
+
     override fun buildModels() {
-        headerView { id(0) }
+        headerView { id(ID_HEADER) }
 
         notes.forEach { note ->
             noteItemView {
@@ -26,7 +32,7 @@ class NoteController(
         }
 
         createNoteView {
-            id(Long.MAX_VALUE)
+            id(ID_CREATE_NOTE)
             onClick { onCreateClick() }
         }
     }
