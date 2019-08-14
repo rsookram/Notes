@@ -18,6 +18,7 @@ class NoteView(context: Context, attrs: AttributeSet) : NestedScrollView(context
 
     init {
         isFillViewport = true
+        setBackgroundResource(R.color.colorPrimary)
 
         val verticalPadding = resources.getDimensionPixelSize(R.dimen.note_vertical_padding)
         updatePadding(top = verticalPadding, bottom = verticalPadding)
