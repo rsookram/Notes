@@ -7,7 +7,7 @@ import me.saket.inboxrecyclerview.page.OnPullToCollapseInterceptor
 class CollapseInterceptor(private val scrollableChild: View) : OnPullToCollapseInterceptor {
 
     override fun invoke(downX: Float, downY: Float, upwardPull: Boolean): InterceptResult {
-        // Only allow collapsing by swiping down by from the top
+        // Only allow collapsing by swiping down from the top
         if (upwardPull) {
             return InterceptResult.INTERCEPTED
         }
