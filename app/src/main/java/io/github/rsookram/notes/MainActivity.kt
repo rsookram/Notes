@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var vm: NoteViewModel
 
@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     @FlowPreview
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel(app.dao)
 
