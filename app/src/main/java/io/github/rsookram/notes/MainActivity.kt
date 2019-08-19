@@ -9,11 +9,13 @@ import io.github.rsookram.notes.view.CollapseInterceptor
 import io.github.rsookram.notes.view.NoteController
 import io.github.rsookram.notes.view.SwipeDismissCallback
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
 class MainActivity : AppCompatActivity() {
@@ -22,27 +24,29 @@ class MainActivity : AppCompatActivity() {
 
     private val scope = MainScope()
 
+    @ExperimentalCoroutinesApi
+    @FlowPreview
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel(app.dao)
 
-        scope.launch {
-            vm.openNote.consumeAsFlow().collect { note ->
+        vm.openNote.consumeAsFlow()
+            .onEach { note ->
                 note_content.bind(note)
                 note_content.scrollTo(0, 0)
                 note_list.expandItem(note.id)
             }
-        }
+            .launchIn(scope)
 
-        scope.launch {
-            vm.deletedNote.consumeAsFlow().collect {
+        vm.deletedNote.consumeAsFlow()
+            .onEach {
                 Snackbar.make(note_list, R.string.deleted_note, Snackbar.LENGTH_LONG)
                     .setAction(R.string.undo_deletion) { vm.onUndoDeleteClicked() }
                     .show()
             }
-        }
+            .launchIn(scope)
 
         note_list.setExpandablePage(expandable_page)
 
