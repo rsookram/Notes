@@ -5,12 +5,12 @@ apply plugin: 'kotlin-kapt'
 
 android {
 
-    compileSdkVersion 28
+    compileSdkVersion Versions.targetSdk
 
     defaultConfig {
         applicationId "io.github.rsookram.notes"
-        minSdkVersion 25
-        targetSdkVersion 28
+        minSdkVersion Versions.minSdk
+        targetSdkVersion Versions.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -56,22 +56,22 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation Versions.appCompat
+    implementation Versions.materialComponents
+    implementation Versions.ktxCore
 
-    implementation 'me.saket:inboxrecyclerview:1.0.0'
+    implementation Versions.inboxRecyclerView
 
-    implementation 'com.airbnb.android:epoxy:3.7.0'
-    kapt 'com.airbnb.android:epoxy-processor:3.7.0'
+    implementation Versions.epoxyCore
+    kapt Versions.epoxyProcessor
 
-    implementation 'androidx.room:room-runtime:2.1.0'
-    implementation 'androidx.room:room-ktx:2.1.0'
-    kapt 'androidx.room:room-compiler:2.1.0'
+    implementation Versions.roomRuntime
+    implementation Versions.roomKtx
+    kapt Versions.roomCompiler
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0'
+    implementation Versions.kotlinStdlib
+    implementation Versions.kotlinCoroutinesCore
+    implementation Versions.kotlinCoroutinesAndroid
 }
 
 kapt {
