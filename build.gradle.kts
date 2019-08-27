@@ -6,8 +6,8 @@ buildscript {
     }
 
     dependencies {
-        classpath Versions.androidGradlePlugin
-        classpath Versions.kotlinGradlePlugin
+        classpath(Versions.androidGradlePlugin)
+        classpath(Versions.kotlinGradlePlugin)
     }
 }
 
@@ -16,8 +16,4 @@ allprojects {
         google()
         jcenter()
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
