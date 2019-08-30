@@ -8,4 +8,5 @@
     android:gravity="top"
     android:background="@null"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-    android:lineSpacingMultiplier="1.2"/>
+    android:lineSpacingMultiplier="1.2"
+    android:importantForAutofill="no"/>
