@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.rsookram.notes.data.Note
 import io.github.rsookram.notes.data.NoteDao
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
@@ -12,15 +13,20 @@ class NoteViewModel(private val dao: NoteDao) : ViewModel() {
 
     val notes = dao.notes()
 
-    private val _openNote = Channel<Note>(Channel.CONFLATED)
-    val openNote: ReceiveChannel<Note> = _openNote
+    @ExperimentalCoroutinesApi
+    private val _openNote = BroadcastChannel<Note>(1)
+    @ExperimentalCoroutinesApi
+    val openNote: ReceiveChannel<Note> get() = _openNote.openSubscription()
 
-    private val _deletedNote = Channel<Unit>(Channel.CONFLATED)
-    val deletedNote: ReceiveChannel<Unit> = _deletedNote
+    @ExperimentalCoroutinesApi
+    private val _deletedNote = BroadcastChannel<Unit>(1)
+    @ExperimentalCoroutinesApi
+    val deletedNote: ReceiveChannel<Unit> get() = _deletedNote.openSubscription()
 
     private var currentNote: Note? = null
     private var reversibleDelete: Note? = null
 
+    @ExperimentalCoroutinesApi
     fun onNoteClicked(note: Note) {
         viewModelScope.launch {
             currentNote = note
@@ -30,6 +36,7 @@ class NoteViewModel(private val dao: NoteDao) : ViewModel() {
         }
     }
 
+    @ExperimentalCoroutinesApi
     fun onCreateNoteClicked() {
         viewModelScope.launch {
             // Clear reversible deletions, since the newly created note may
@@ -42,6 +49,7 @@ class NoteViewModel(private val dao: NoteDao) : ViewModel() {
         }
     }
 
+    @ExperimentalCoroutinesApi
     fun onSwipedAway(position: Int) {
         viewModelScope.launch {
             val note = notes.value?.getOrNull(position) ?: return@launch
