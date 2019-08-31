@@ -13,7 +13,9 @@ object Versions {
 
     const val appCompat = "androidx.appcompat:appcompat:1.1.0-rc01"
     const val materialComponents = "com.google.android.material:material:1.0.0"
-    const val ktxCore = "androidx.core:core-ktx:1.0.2"
+    const val coreKtx = "androidx.core:core-ktx:1.0.2"
+    const val activityKtx = "androidx.activity:activity-ktx:1.0.0-rc01"
+    const val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-rc01"
 
     const val inboxRecyclerView = "me.saket:inboxrecyclerview:1.0.0"
 

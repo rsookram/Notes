@@ -1,8 +1,11 @@
 package io.github.rsookram.notes
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import io.github.rsookram.notes.view.CollapseInterceptor
@@ -20,7 +23,13 @@ import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private lateinit var vm: NoteViewModel
+    @Suppress("UNCHECKED_CAST")
+    private val vm: NoteViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                NoteViewModel(app.dao) as T
+        }
+    }
 
     private val scope = MainScope()
 
@@ -28,8 +37,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     @FlowPreview
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        vm = lastNonConfigurationInstance as? NoteViewModel ?: NoteViewModel(app.dao)
 
         vm.openNote.consumeAsFlow()
             .onEach { note ->
@@ -90,15 +97,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onDestroy() {
         super.onDestroy()
-
         scope.cancel()
-
-        if (!isChangingConfigurations) {
-            vm.onCleared()
-        }
     }
-
-    override fun onRetainCustomNonConfigurationInstance(): Any = vm
 
     override fun onBackPressed() {
         if (expandable_page.isExpandedOrExpanding) {

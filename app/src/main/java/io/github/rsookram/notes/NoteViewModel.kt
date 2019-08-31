@@ -1,14 +1,14 @@
 package io.github.rsookram.notes
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.github.rsookram.notes.data.Note
 import io.github.rsookram.notes.data.NoteDao
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
-class NoteViewModel(private val dao: NoteDao) {
+class NoteViewModel(private val dao: NoteDao) : ViewModel() {
 
     val notes = dao.notes()
 
@@ -21,10 +21,8 @@ class NoteViewModel(private val dao: NoteDao) {
     private var currentNote: Note? = null
     private var reversibleDelete: Note? = null
 
-    private val scope = MainScope()
-
     fun onNoteClicked(note: Note) {
-        scope.launch {
+        viewModelScope.launch {
             currentNote = note
 
             val n = dao.get(note.id) ?: return@launch
@@ -33,8 +31,8 @@ class NoteViewModel(private val dao: NoteDao) {
     }
 
     fun onCreateNoteClicked() {
-        scope.launch {
-            // Clear and reversible deletions, since the newly created note may
+        viewModelScope.launch {
+            // Clear reversible deletions, since the newly created note may
             // have reused its key
             reversibleDelete = null
 
@@ -45,7 +43,7 @@ class NoteViewModel(private val dao: NoteDao) {
     }
 
     fun onSwipedAway(position: Int) {
-        scope.launch {
+        viewModelScope.launch {
             val note = notes.value?.getOrNull(position) ?: return@launch
             reversibleDelete = note
 
@@ -56,7 +54,7 @@ class NoteViewModel(private val dao: NoteDao) {
     }
 
     fun onUndoDeleteClicked() {
-        scope.launch {
+        viewModelScope.launch {
             val (id, content) = reversibleDelete ?: return@launch
             dao.save(id, content)
         }
@@ -75,14 +73,10 @@ class NoteViewModel(private val dao: NoteDao) {
     }
 
     private fun saveIfNotEmpty(note: Note, content: String) {
-        scope.launch {
+        viewModelScope.launch {
             if (content.isNotBlank()) {
                 dao.save(note.id, content)
             }
         }
-    }
-
-    fun onCleared() {
-        scope.cancel()
     }
 }

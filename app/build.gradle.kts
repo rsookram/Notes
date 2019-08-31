@@ -62,7 +62,9 @@ tasks.withType<KotlinCompile> {
 dependencies {
     implementation(Versions.appCompat)
     implementation(Versions.materialComponents)
-    implementation(Versions.ktxCore)
+    implementation(Versions.coreKtx)
+    implementation(Versions.activityKtx)
+    implementation(Versions.lifecycleViewModelKtx)
 
     implementation(Versions.inboxRecyclerView)
 
