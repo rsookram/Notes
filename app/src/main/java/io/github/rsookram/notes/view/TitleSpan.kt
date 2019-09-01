@@ -1,25 +1,13 @@
 package io.github.rsookram.notes.view
 
 import android.text.Editable
+import android.text.NoCopySpan
 import android.text.Spanned
-import android.text.TextPaint
 import android.text.TextWatcher
-import android.text.style.MetricAffectingSpan
+import android.text.style.RelativeSizeSpan
 
-private const val SCALE = 1.5F
-
-// Use a custom span instead of RelativeSizeSpan so that it doesn't get copied
-// to the clipboard
-class TitleSpan : MetricAffectingSpan() {
-
-    override fun updateDrawState(ds: TextPaint) {
-        ds.textSize = ds.textSize * SCALE
-    }
-
-    override fun updateMeasureState(ds: TextPaint) {
-        ds.textSize = ds.textSize * SCALE
-    }
-}
+// Use NoCopySpan to prevent copying to the clipboard to the clipboard
+class TitleSpan : RelativeSizeSpan(1.5F), NoCopySpan
 
 class ApplyTitleSpanTextWatcher : TextWatcher {
 
