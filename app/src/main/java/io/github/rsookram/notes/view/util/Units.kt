@@ -1,4 +1,4 @@
-package io.github.rsookram.notes.view
+package io.github.rsookram.notes.view.util
 
 import android.content.res.Resources
 import androidx.annotation.Px

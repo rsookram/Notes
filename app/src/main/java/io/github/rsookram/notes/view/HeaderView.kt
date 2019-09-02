@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.widget.AppCompatTextView
 import com.airbnb.epoxy.ModelView
 import io.github.rsookram.notes.R
+import io.github.rsookram.notes.view.util.dp
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class HeaderView(context: Context) : AppCompatTextView(context) {
