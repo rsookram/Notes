@@ -6,7 +6,7 @@ import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.RelativeSizeSpan
 
-// Use NoCopySpan to prevent copying to the clipboard to the clipboard
+// Use NoCopySpan to prevent copying to the clipboard
 class TitleSpan : RelativeSizeSpan(1.5F), NoCopySpan
 
 class ApplyTitleSpanTextWatcher : TextWatcher {
