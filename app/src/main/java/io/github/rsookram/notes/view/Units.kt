@@ -1,6 +1,10 @@
 package io.github.rsookram.notes.view
 
 import android.content.res.Resources
+import androidx.annotation.Px
 
+/**
+ * Treats the receiver as a value in DP, and returns the conversion to pixels
+ */
 val Int.dp: Int
-    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+    @Px get() = (this * Resources.getSystem().displayMetrics.density).toInt()

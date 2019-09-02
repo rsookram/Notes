@@ -1,17 +1,32 @@
 package io.github.rsookram.notes.view
 
 import android.content.Context
-import android.view.View
-import android.widget.FrameLayout
+import android.util.TypedValue
+import android.view.Gravity
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.updatePadding
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelView
 import io.github.rsookram.notes.R
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
-class CreateNoteView(context: Context) : FrameLayout(context) {
+class CreateNoteView(context: Context) : AppCompatTextView(context) {
 
     init {
-        View.inflate(context, R.layout.view_create_note, this)
+        height = 56.dp
+        gravity = Gravity.CENTER_VERTICAL
+        updatePadding(left = 16.dp, right = 16.dp)
+
+        setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_add, 0, 0, 0)
+        compoundDrawablePadding = 8.dp
+
+        val value = TypedValue().also { v ->
+            context.theme.resolveAttribute(R.attr.selectableItemBackground, v, true)
+        }
+        setBackgroundResource(value.resourceId)
+
+        setText(R.string.new_note)
+        setTextAppearance(R.style.TextAppearance_MaterialComponents_Body1)
     }
 
     @CallbackProp
