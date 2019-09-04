@@ -12,7 +12,9 @@ class App : Application() {
             .build()
     }
 
-    val dao by lazy { database.noteDao() }
+    private val dao by lazy { database.noteDao() }
+
+    fun createNoteViewModel() = NoteViewModel(dao)
 }
 
 val Context.app: App

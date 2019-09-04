@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val vm: NoteViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                NoteViewModel(app.dao) as T
+                app.createNoteViewModel() as T
         }
     }
 
