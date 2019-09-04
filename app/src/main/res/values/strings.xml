@@ -2,6 +2,7 @@
     <string name="app_name">Notes</string>
 
     <string name="new_note">New Note</string>
+    <string name="take_note_prompt">Take a note</string>
     <string name="deleted_note">Deleted note</string>
     <string name="undo_deletion">Undo</string>
 </resources>
