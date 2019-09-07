@@ -1,7 +1,7 @@
 object Versions {
 
     private const val kotlin = "1.3.50"
-    private const val kotlinCoroutines = "1.3.0"
+    private const val kotlinCoroutines = "1.3.1"
     private const val epoxy = "3.7.0"
     private const val room = "2.1.0"
 
