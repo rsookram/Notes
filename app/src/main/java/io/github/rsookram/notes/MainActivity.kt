@@ -1,11 +1,10 @@
 package io.github.rsookram.notes
 
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import io.github.rsookram.notes.view.CollapseInterceptor
@@ -88,6 +87,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 note_content.hideKeyboard()
             }
         })
+
+        onBackPressedDispatcher.addCallback {
+            if (expandable_page.isExpandedOrExpanding) {
+                note_list.collapse()
+            } else {
+                finish()
+            }
+        }
     }
 
     override fun onStop() {
@@ -98,13 +105,5 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onDestroy() {
         super.onDestroy()
         scope.cancel()
-    }
-
-    override fun onBackPressed() {
-        if (expandable_page.isExpandedOrExpanding) {
-            note_list.collapse()
-        } else {
-            super.onBackPressed()
-        }
     }
 }
