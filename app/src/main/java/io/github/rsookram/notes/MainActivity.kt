@@ -2,9 +2,8 @@ package io.github.rsookram.notes
 
 import android.os.Bundle
 import androidx.activity.addCallback
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import io.github.rsookram.notes.view.CollapseInterceptor
@@ -22,13 +21,7 @@ import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    @Suppress("UNCHECKED_CAST")
-    private val vm: NoteViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                app.createNoteViewModel() as T
-        }
-    }
+    private val vm: NoteViewModel by viewModel { app.createNoteViewModel() }
 
     private val scope = MainScope()
 
