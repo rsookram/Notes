@@ -6,12 +6,10 @@ import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.RelativeSizeSpan
 
-// Use NoCopySpan to prevent copying to the clipboard
-class TitleSpan : RelativeSizeSpan(1.5F), NoCopySpan
-
 class ApplyTitleSpanTextWatcher : TextWatcher {
 
-    private val span = TitleSpan()
+    // Use NoCopySpan to prevent copying to the clipboard
+    private object Span : RelativeSizeSpan(1.5F), NoCopySpan
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
         Unit
@@ -26,9 +24,9 @@ class ApplyTitleSpanTextWatcher : TextWatcher {
             end = s.length
         }
 
-        if (s.getSpanStart(span) != start || s.getSpanEnd(span) != end) {
-            s.removeSpan(span)
-            s.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (s.getSpanStart(Span) != start || s.getSpanEnd(Span) != end) {
+            s.removeSpan(Span)
+            s.setSpan(Span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
 }
